@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { LogoMark } from '@/components/logo';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -27,13 +28,13 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="grid-bg min-h-screen flex items-center justify-center px-5 py-14">
-      <div className="w-full max-w-sm">
-        <Link href="/" className="flex items-center gap-2 font-semibold mb-8 justify-center">
-          <span className="inline-block w-6 h-6 rounded-md bg-[color:var(--accent)]" />
+    <div className="hero-bg min-h-screen flex items-center justify-center px-5 py-14 relative">
+      <div className="w-full max-w-sm relative">
+        <Link href="/" className="flex items-center gap-2 font-semibold mb-8 justify-center text-[color:var(--text)]">
+          <span className="text-[color:var(--accent)]"><LogoMark size={22} /></span>
           DeepGate
         </Link>
-        <div className="card p-7">
+        <div className="card-elev p-8">
           <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
           <form onSubmit={submit} className="mt-6 space-y-3">
             <div>

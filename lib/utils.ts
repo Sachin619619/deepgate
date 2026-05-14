@@ -6,10 +6,10 @@ export function cn(...i: ClassValue[]) {
 }
 
 export function formatNumber(n: number) {
-  return new Intl.NumberFormat('en-IN').format(n);
+  return new Intl.NumberFormat('en-US').format(n);
 }
 export function formatINR(n: number) {
-  return new Intl.NumberFormat('en-IN', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'INR',
     maximumFractionDigits: 2,

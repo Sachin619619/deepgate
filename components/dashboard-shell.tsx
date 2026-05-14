@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { LogoMark } from './logo';
 
 export function DashboardShell({ children, email }: { children: React.ReactNode; email: string }) {
   const path = usePathname();
@@ -21,10 +22,10 @@ export function DashboardShell({ children, email }: { children: React.ReactNode;
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="border-b border-[color:var(--border)] bg-[color:var(--bg)]/85 backdrop-blur sticky top-0 z-30">
+      <header className="border-b border-[color:var(--border)] bg-[color:var(--bg)]/80 backdrop-blur-md sticky top-0 z-30">
         <div className="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
-            <span className="inline-block w-6 h-6 rounded-md bg-[color:var(--accent)]" />
+          <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight text-[color:var(--text)]">
+            <span className="text-[color:var(--accent)]"><LogoMark size={22} /></span>
             DeepGate
           </Link>
           <div className="flex items-center gap-2 text-sm text-[color:var(--muted)]">

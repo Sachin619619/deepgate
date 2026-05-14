@@ -10,7 +10,7 @@
 - **Service id**: `3e8a1070-4432-41df-a1ef-0b6bcc466d1a`
 - **Environment**: `production` (id `f6d2447b-5053-4c48-9701-f932771cbe2b`)
 - **Auto-deploys**: on push to `main` (Railway GitHub App watches the repo).
-- **Region**: AWS ap-south-1 (Mumbai), same as Supabase.
+- **Region**: Co-located with the Supabase project for low DB latency.
 
 ## GitHub repo
 

@@ -79,7 +79,7 @@ export default async function DashboardOverview() {
         )}
         <div>
           <div className="text-xs uppercase tracking-widest text-[color:var(--muted)]">Renews / expires</div>
-          <div className="mt-1 text-lg font-medium">{new Date(user.plan_expires_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
+          <div className="mt-1 text-lg font-medium">{new Date(user.plan_expires_at).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
         </div>
       </div>
 

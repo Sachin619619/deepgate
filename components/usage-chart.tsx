@@ -21,7 +21,7 @@ export function UsageChart({ data }: { data: { day: string; tokens: number }[] }
         <Tooltip
           contentStyle={{ background: '#0f141c', border: '1px solid #1f2733', borderRadius: 8, fontSize: 12 }}
           labelStyle={{ color: '#8b95a5' }}
-          formatter={(v) => [Number(v ?? 0).toLocaleString('en-IN'), 'tokens']}
+          formatter={(v) => [Number(v ?? 0).toLocaleString('en-US'), 'tokens']}
         />
         <Area type="monotone" dataKey="tokens" stroke="#5af78e" strokeWidth={2} fill="url(#g1)" />
       </AreaChart>

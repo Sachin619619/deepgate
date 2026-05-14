@@ -107,7 +107,7 @@ export function BillingClient({ plan, payments, razorpayConfigured }: { plan: st
               <div key={t.id} className="flex items-center justify-between py-3">
                 <div>
                   <div className="font-medium">{t.label}</div>
-                  <div className="text-xs text-[color:var(--muted)]">&#8377;{t.priceInr.toLocaleString('en-IN')}</div>
+                  <div className="text-xs text-[color:var(--muted)]">&#8377;{t.priceInr.toLocaleString('en-US')}</div>
                 </div>
                 <button className="btn btn-ghost" disabled={busy !== null} onClick={() => buy('topup', t.id)}>
                   {busy === `topup:${t.id}` ? 'Redirecting…' : 'Buy'}
@@ -127,14 +127,14 @@ export function BillingClient({ plan, payments, razorpayConfigured }: { plan: st
           {payments.map(p => (
             <div key={p.id} className="px-5 py-3 flex items-center justify-between gap-3 text-sm">
               <div>
-                <div className="font-medium">&#8377;{Number(p.amount_inr).toLocaleString('en-IN')}</div>
+                <div className="font-medium">&#8377;{Number(p.amount_inr).toLocaleString('en-US')}</div>
                 <div className="text-xs text-[color:var(--muted)] mt-0.5">{p.plan_or_topup}</div>
               </div>
               <div className="text-right">
                 <div className={`text-xs uppercase tracking-widest ${p.status === 'captured' ? 'text-[color:var(--accent)]' : 'text-[color:var(--muted)]'}`}>
                   {p.status}
                 </div>
-                <div className="text-xs text-[color:var(--muted)] mt-0.5">{new Date(p.created_at).toLocaleString('en-IN')}</div>
+                <div className="text-xs text-[color:var(--muted)] mt-0.5">{new Date(p.created_at).toLocaleString('en-US')}</div>
               </div>
             </div>
           ))}

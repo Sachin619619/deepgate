@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 32" fill="none">
+  <title>DeepGate</title>
+  <path d="M6 6 L16 16 L6 26" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M16 6 L26 16 L16 26" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+  <text x="40" y="22" font-family="Geist, Inter, system-ui, sans-serif" font-size="18" font-weight="600" letter-spacing="-0.5" fill="currentColor">DeepGate</text>
+</svg>

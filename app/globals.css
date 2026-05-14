@@ -1,16 +1,29 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #0a0e14;
-  --panel: #0f141c;
-  --panel-2: #141a24;
-  --border: #1f2733;
-  --text: #e6edf3;
-  --muted: #8b95a5;
-  --accent: #5af78e;       /* mint green */
-  --accent-2: #58c4ff;     /* electric blue */
+  /* Background scale — deeper, more neutral, less blue */
+  --bg: #07090d;
+  --panel: #0d1117;
+  --panel-2: #131922;
+  --panel-3: #1a212c;
+  --border: #1e2530;
+  --border-strong: #2a3340;
+  --text: #e8edf3;
+  --muted: #8a94a6;
+  --muted-2: #5b6473;
+
+  /* Brand */
+  --accent: #5af78e;            /* mint primary */
+  --accent-soft: rgba(90, 247, 142, 0.12);
+  --accent-2: #58c4ff;          /* electric blue */
+  --warm: #f5b454;              /* amber, used sparingly on Pro tier */
   --warn: #ffb454;
   --danger: #ff6b6b;
+
+  /* Layered shadows — feel real, not Tailwind defaults */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px 1px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 16px -4px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.3), 0 16px 32px -8px rgba(0, 0, 0, 0.35);
 }
 
 @theme inline {
@@ -22,9 +35,11 @@
   --color-muted: var(--muted);
   --color-accent: var(--accent);
   --color-accent-2: var(--accent-2);
+  --color-warm: var(--warm);
   --color-warn: var(--warn);
   --color-danger: var(--danger);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -34,79 +49,139 @@ html, body {
 }
 
 body {
-  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, .display {
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.02em;
 }
 
 ::selection { background: rgba(90, 247, 142, 0.25); color: #fff; }
 
-/* Subtle grid backdrop */
-.grid-bg {
+/* ---------- Backgrounds ---------- */
+
+/* Hero: subtle grid + soft radial spotlight, refined */
+.hero-bg {
+  position: relative;
+  background-color: var(--bg);
   background-image:
-    radial-gradient(circle at 50% 0%, rgba(90, 247, 142, 0.06), transparent 60%),
-    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-  background-size: auto, 40px 40px, 40px 40px;
+    radial-gradient(ellipse 80% 55% at 50% -10%, rgba(90, 247, 142, 0.10), transparent 60%),
+    radial-gradient(ellipse 50% 35% at 85% 25%, rgba(88, 196, 255, 0.06), transparent 65%),
+    linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+  background-size: auto, auto, 44px 44px, 44px 44px;
+  background-position: 0 0, 0 0, -1px -1px, -1px -1px;
+}
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 100% 60% at 50% 100%, var(--bg) 0%, transparent 70%);
 }
 
-/* Premium glow on accents */
-.glow {
-  box-shadow:
-    0 0 0 1px rgba(90, 247, 142, 0.35),
-    0 10px 40px -10px rgba(90, 247, 142, 0.45);
+.grid-bg {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse 60% 45% at 50% 0%, rgba(90, 247, 142, 0.06), transparent 60%),
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: auto, 44px 44px, 44px 44px;
 }
 
+/* ---------- Buttons ---------- */
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  padding: 0.6rem 1rem;
+  padding: 0.55rem 1rem;
   border-radius: 0.5rem;
   font-weight: 500;
-  transition: all 120ms ease;
+  font-size: 0.875rem;
+  line-height: 1.2;
+  transition: background 140ms ease, color 140ms ease, transform 120ms ease, box-shadow 160ms ease, filter 140ms ease, border-color 140ms ease;
   border: 1px solid transparent;
   cursor: pointer;
-  font-size: 0.9rem;
+  white-space: nowrap;
+  user-select: none;
 }
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+}
+.btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none !important; }
+
 .btn-primary {
   background: var(--accent);
-  color: #062012;
+  color: #04140a;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.22) inset, 0 6px 18px -6px rgba(90, 247, 142, 0.55);
 }
-.btn-primary:hover { filter: brightness(1.06); transform: translateY(-1px); }
+.btn-primary:hover:not(:disabled) { filter: brightness(1.06); transform: translateY(-1px); }
+.btn-primary:active:not(:disabled) { transform: translateY(0); filter: brightness(0.98); }
+
 .btn-ghost {
   background: transparent;
   color: var(--text);
-  border-color: var(--border);
+  border-color: var(--border-strong);
 }
-.btn-ghost:hover { background: var(--panel-2); }
+.btn-ghost:hover:not(:disabled) { background: var(--panel-2); border-color: var(--border-strong); }
+.btn-ghost:active:not(:disabled) { background: var(--panel-3); }
+
 .btn-danger {
   background: transparent;
   color: var(--danger);
   border-color: rgba(255, 107, 107, 0.3);
 }
-.btn-danger:hover { background: rgba(255, 107, 107, 0.08); }
+.btn-danger:hover:not(:disabled) { background: rgba(255, 107, 107, 0.08); }
 
+/* ---------- Cards ---------- */
 .card {
   background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: 0.75rem;
+  border-radius: 0.875rem;
+  box-shadow: var(--shadow-sm);
+}
+.card-elev {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  box-shadow: var(--shadow-md);
+}
+.card-glass {
+  background: linear-gradient(180deg, rgba(19, 25, 34, 0.85), rgba(13, 17, 23, 0.85));
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  box-shadow: var(--shadow-lg);
 }
 
+/* ---------- Form ---------- */
 .input {
   background: var(--panel-2);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   color: var(--text);
   border-radius: 0.5rem;
   padding: 0.6rem 0.85rem;
   width: 100%;
   outline: none;
-  transition: border-color 120ms ease;
-  font-size: 0.95rem;
+  transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
+  font-size: 0.925rem;
 }
-.input:focus { border-color: var(--accent); }
+.input::placeholder { color: var(--muted-2); }
+.input:hover { border-color: #344056; }
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(90, 247, 142, 0.15);
+  background: var(--panel-2);
+}
 
+/* ---------- Type helpers ---------- */
 .code {
   font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
@@ -114,17 +189,41 @@ body {
 .kbd {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
   background: var(--panel-2);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-bottom-width: 2px;
   padding: 0.1rem 0.4rem;
   border-radius: 0.3rem;
   font-size: 0.78rem;
 }
 
-.link { color: var(--accent-2); }
-.link:hover { text-decoration: underline; }
+.link { color: var(--accent-2); transition: opacity 140ms ease; }
+.link:hover { opacity: 0.85; text-decoration: underline; }
 
 .divide-row > * + * { border-top: 1px solid var(--border); }
 
 .scroll-mute::-webkit-scrollbar { width: 8px; height: 8px; }
 .scroll-mute::-webkit-scrollbar-thumb { background: #232b38; border-radius: 4px; }
+
+/* ---------- Premium glow accent ---------- */
+.glow {
+  box-shadow:
+    0 0 0 1px rgba(90, 247, 142, 0.35),
+    0 10px 40px -10px rgba(90, 247, 142, 0.5),
+    0 1px 0 rgba(255, 255, 255, 0.2) inset;
+}
+
+/* ---------- Subtle entrance ---------- */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise { animation: rise 600ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.rise-2 { animation: rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) 80ms both; }
+.rise-3 { animation: rise 800ms cubic-bezier(0.2, 0.7, 0.2, 1) 160ms both; }
+
+/* ---------- Pricing tier accent ring ---------- */
+.tier-popular {
+  position: relative;
+  border-color: rgba(90, 247, 142, 0.45) !important;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 12px 40px -12px rgba(90, 247, 142, 0.25);
+}

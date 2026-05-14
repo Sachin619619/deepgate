@@ -106,8 +106,8 @@ export function KeysClient() {
                 <div className="font-medium truncate">{k.name}</div>
                 <div className="text-xs text-[color:var(--muted)] mt-1 flex flex-wrap gap-x-3 gap-y-1">
                   <code className="code">{k.key_prefix}…</code>
-                  <span>created {new Date(k.created_at).toLocaleDateString('en-IN')}</span>
-                  {k.last_used_at && <span>last used {new Date(k.last_used_at).toLocaleString('en-IN')}</span>}
+                  <span>created {new Date(k.created_at).toLocaleDateString('en-US')}</span>
+                  {k.last_used_at && <span>last used {new Date(k.last_used_at).toLocaleString('en-US')}</span>}
                   {k.revoked_at && <span className="text-[color:var(--danger)]">revoked</span>}
                 </div>
               </div>
