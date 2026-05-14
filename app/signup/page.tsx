@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { LogoMark } from '@/components/logo';
-import { GoogleSignInButton } from '@/components/google-signin-button';
 
 const DISPOSABLE_EMAIL_DOMAINS = new Set([
   'mailinator.com', 'tempmail.com', 'temp-mail.org', '10minutemail.com', 'guerrillamail.com',
@@ -93,17 +92,7 @@ export default function SignupPage() {
           <h1 className="text-2xl font-semibold tracking-tight">Create your account</h1>
           <p className="text-sm text-[color:var(--muted)] mt-1">7-day free trial &middot; 100K tokens &middot; no card</p>
 
-          <div className="mt-6">
-            <GoogleSignInButton mode="signup" onError={(m) => setErr(m || null)} />
-          </div>
-
-          <div className="flex items-center gap-3 my-5">
-            <div className="flex-1 h-px bg-[color:var(--border,rgba(255,255,255,0.08))]" />
-            <span className="text-[10px] uppercase tracking-[2px] text-[color:var(--muted-2)]">or continue with email</span>
-            <div className="flex-1 h-px bg-[color:var(--border,rgba(255,255,255,0.08))]" />
-          </div>
-
-          <form onSubmit={submit} className="space-y-3" noValidate>
+          <form onSubmit={submit} className="space-y-3 mt-6" noValidate>
             <div>
               <label className="text-xs text-[color:var(--muted)] uppercase tracking-widest">Email</label>
               <input
