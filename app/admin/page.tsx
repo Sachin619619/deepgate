@@ -78,7 +78,7 @@ export default async function AdminPage() {
         <p className="text-[color:var(--muted)] text-sm mt-1">All signups and account activity across DeepGate.</p>
       </div>
 
-      <div className="grid sm:grid-cols-3 lg:grid-cols-5 gap-4 mt-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mt-6">
         <Stat label="Total users" value={formatNumber(Number(agg.total))} />
         <Stat label="Signups today" value={formatNumber(Number(agg.today))} />
         <Stat label="Signups this week" value={formatNumber(Number(agg.week))} />
@@ -88,7 +88,9 @@ export default async function AdminPage() {
 
       <div className="card p-5 mt-4">
         <h2 className="font-semibold tracking-tight">All signups ({users.length})</h2>
-        <div className="mt-4 overflow-x-auto">
+
+        {/* Desktop / tablet: table */}
+        <div className="mt-4 overflow-x-auto hidden md:block">
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-[color:var(--muted)] text-xs uppercase tracking-widest">
@@ -123,6 +125,30 @@ export default async function AdminPage() {
             </tbody>
           </table>
         </div>
+
+        {/* Mobile: stacked cards */}
+        <div className="mt-4 space-y-3 md:hidden">
+          {users.map(u => (
+            <div key={u.id} className="rounded-lg border border-[color:var(--border)] p-3.5">
+              <div className="flex items-start justify-between gap-2">
+                <div className="font-medium break-all text-sm">
+                  {u.email}
+                  {u.is_admin && <span className="ml-1.5 text-[10px] uppercase tracking-wide text-[color:var(--accent)]">admin</span>}
+                </div>
+                <span className="text-xs capitalize shrink-0 px-2 py-0.5 rounded-full border border-[color:var(--border)]">{u.plan}</span>
+              </div>
+              {u.name && <div className="text-xs text-[color:var(--muted)] mt-0.5">{u.name}</div>}
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 mt-3 text-xs">
+                <Field label="Signed up" value={fmtDate(u.created_at)} />
+                <Field label="Expires" value={fmtDate(u.plan_expires_at)} />
+                <Field label="Keys" value={String(u.key_count)} />
+                <Field label="Requests" value={formatNumber(u.requests)} />
+                <Field label="Tokens" value={formatNumber(u.tokens)} />
+                <Field label="Spend" value={formatINR(Number(u.spend_inr))} />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="card p-5 mt-4">
@@ -130,9 +156,9 @@ export default async function AdminPage() {
         <div className="mt-4 divide-row">
           {payments.length === 0 && <div className="text-sm text-[color:var(--muted)]">No payments yet.</div>}
           {payments.map((p, i) => (
-            <div key={i} className="flex justify-between py-2.5 text-sm">
-              <span>{p.email} <span className="text-[color:var(--muted)]">· {p.plan_or_topup}</span></span>
-              <span className="text-[color:var(--muted)]">
+            <div key={i} className="flex flex-col sm:flex-row sm:justify-between gap-0.5 py-2.5 text-sm">
+              <span className="break-all">{p.email} <span className="text-[color:var(--muted)]">· {p.plan_or_topup}</span></span>
+              <span className="text-[color:var(--muted)] shrink-0">
                 {formatINR(Number(p.amount_inr))} · {p.status} · {fmtDate(p.created_at)}
               </span>
             </div>
@@ -148,6 +174,15 @@ function Stat({ label, value }: { label: string; value: string }) {
     <div className="card p-5">
       <div className="text-xs uppercase tracking-widest text-[color:var(--muted)]">{label}</div>
       <div className="mt-2 text-2xl font-semibold tracking-tight">{value}</div>
+    </div>
+  );
+}
+
+function Field({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <div className="text-[color:var(--muted)] uppercase tracking-widest text-[10px]">{label}</div>
+      <div className="mt-0.5">{value}</div>
     </div>
   );
 }
