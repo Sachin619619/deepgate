@@ -29,7 +29,6 @@ export default async function BillingPage() {
       <BillingClient
         plan={user.plan}
         payments={payments.map(p => ({ ...p, amount_inr: Number(p.amount_inr) }))}
-        razorpayConfigured={Boolean(process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET)}
       />
     </DashboardShell>
   );

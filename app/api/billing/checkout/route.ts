@@ -1,5 +1,4 @@
 import { NextRequest } from 'next/server';
-import Razorpay from 'razorpay';
 import { q } from '@/lib/db';
 import { getSessionUser } from '@/lib/auth';
 import { PLANS, TOPUPS, type TopupId } from '@/lib/billing';
@@ -7,18 +6,14 @@ import { PLANS, TOPUPS, type TopupId } from '@/lib/billing';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-function razorpayClient() {
-  const key_id = process.env.RAZORPAY_KEY_ID;
-  const key_secret = process.env.RAZORPAY_KEY_SECRET;
-  if (!key_id || !key_secret) return null;
-  return new Razorpay({ key_id, key_secret });
-}
-
+// Manual UPI billing (ActionBot-style): the user pays to the UPI VPA and
+// submits the transaction reference. The payment is recorded as `pending`
+// and an admin verifies it before the plan / tokens are credited.
 export async function POST(req: NextRequest) {
   const u = await getSessionUser();
   if (!u) return Response.json({ error: 'unauthenticated' }, { status: 401 });
 
-  let body: { kind?: 'plan' | 'topup'; id?: string };
+  let body: { kind?: 'plan' | 'topup'; id?: string; transactionId?: string };
   try { body = await req.json(); } catch { return Response.json({ error: 'invalid_json' }, { status: 400 }); }
 
   let amountInr = 0;
@@ -34,38 +29,19 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: 'invalid_product' }, { status: 400 });
   }
 
-  const rp = razorpayClient();
-  if (!rp) {
-    // Stub mode: pretend payment succeeded immediately, fulfill, return success
-    const pid = `stub_${Date.now()}`;
-    await q(
-      `INSERT INTO deepgate.payments (user_id, razorpay_order_id, razorpay_payment_id, amount_inr, status, plan_or_topup)
-       VALUES ($1, $2, $3, $4, 'captured', $5)`,
-      [u.id, pid, pid, amountInr, label]
-    );
-    await fulfill(u.id, label);
-    return Response.json({ stub: true, success: true });
-  }
+  const txn = (body.transactionId || '').trim();
+  if (txn.length < 4)
+    return Response.json({ error: 'invalid_transaction_id', message: 'Enter the UPI transaction / reference ID from your payment app.' }, { status: 400 });
 
-  const order = await rp.orders.create({
-    amount: amountInr * 100,
-    currency: 'INR',
-    notes: { user_id: u.id, label },
-  });
-  await q(
-    `INSERT INTO deepgate.payments (user_id, razorpay_order_id, amount_inr, status, plan_or_topup)
-     VALUES ($1, $2, $3, 'created', $4)`,
-    [u.id, order.id, amountInr, label]
+  const rows = await q<{ id: string }>(
+    `INSERT INTO deepgate.payments (user_id, amount_inr, status, plan_or_topup, provider, transaction_id)
+     VALUES ($1, $2, 'pending', $3, 'upi', $4) RETURNING id`,
+    [u.id, amountInr, label, txn]
   );
-  return Response.json({
-    stub: false,
-    orderId: order.id,
-    amount: amountInr * 100,
-    currency: 'INR',
-    keyId: process.env.RAZORPAY_KEY_ID,
-  });
+  return Response.json({ ok: true, paymentId: rows[0].id });
 }
 
+// Credit a verified payment's plan / tokens. Called by the admin verify route.
 export async function fulfill(userId: string, label: string) {
   if (label === 'plan:starter') {
     await q(

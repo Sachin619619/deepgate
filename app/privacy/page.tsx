@@ -14,7 +14,7 @@ export default function PrivacyPage() {
             <li>Account email and password hash (bcrypt) for authentication.</li>
             <li>API key metadata: name, hashed key, timestamps.</li>
             <li>Per-request usage metadata: model, token counts, latency, timestamp. We do not retain prompt or completion content.</li>
-            <li>Payment transaction IDs from Razorpay (no card numbers).</li>
+            <li>UPI payment transaction / reference IDs (no card numbers).</li>
           </ul>
           <h2 className="text-xl font-semibold mt-8">Upstream providers</h2>
           <p>Requests are forwarded to upstream model providers (Ollama Cloud or DeepSeek). Their handling of prompts is governed by their respective privacy policies. Do not send sensitive personal data through the Service unless you accept the upstream provider&rsquo;s terms.</p>

@@ -3,6 +3,7 @@ import { getSessionUser } from '@/lib/auth';
 import { DashboardShell } from '@/components/dashboard-shell';
 import { q } from '@/lib/db';
 import { formatINR, formatNumber } from '@/lib/utils';
+import { PendingPayments, type Pending } from './pending-payments';
 
 export const dynamic = 'force-dynamic';
 
@@ -71,6 +72,13 @@ export default async function AdminPage() {
      ORDER BY p.created_at DESC LIMIT 20`
   );
 
+  const pending = await q<Pending>(
+    `SELECT p.id, u.email, p.amount_inr::text, p.plan_or_topup, p.transaction_id, p.created_at
+     FROM deepgate.payments p JOIN deepgate.users u ON u.id = p.user_id
+     WHERE p.status = 'pending'
+     ORDER BY p.created_at DESC`
+  );
+
   return (
     <DashboardShell email={user.email} isAdmin>
       <div>
@@ -85,6 +93,8 @@ export default async function AdminPage() {
         <Stat label="Paying (Starter)" value={formatNumber(Number(agg.paying))} />
         <Stat label="Total revenue" value={formatINR(Number(agg.revenue))} />
       </div>
+
+      {pending.length > 0 && <PendingPayments pending={pending} />}
 
       <div className="card p-5 mt-4">
         <h2 className="font-semibold tracking-tight">All signups ({users.length})</h2>
