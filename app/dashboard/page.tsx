@@ -93,7 +93,7 @@ export default async function DashboardOverview() {
 
       {/* Chart + breakdown */}
       <div className="grid lg:grid-cols-3 gap-4 mt-4">
-        <div className="card p-5 lg:col-span-2">
+        <div className="card p-5 lg:col-span-2 min-w-0">
           <div className="flex items-baseline justify-between">
             <h2 className="font-semibold tracking-tight">Last 14 days</h2>
             <span className="text-xs text-[color:var(--muted)]">tokens / day</span>
@@ -102,14 +102,14 @@ export default async function DashboardOverview() {
             <UsageChart data={daily.map(d => ({ day: d.day, tokens: d.tokens }))} />
           </div>
         </div>
-        <div className="card p-5">
+        <div className="card p-5 min-w-0">
           <h2 className="font-semibold tracking-tight">By model (this month)</h2>
           <div className="mt-4 divide-row">
-            {byModel.length === 0 && <div className="text-sm text-[color:var(--muted)]">No traffic yet — try the snippet on the right.</div>}
+            {byModel.length === 0 && <div className="text-sm text-[color:var(--muted)]">No traffic yet — try the snippet below.</div>}
             {byModel.map(m => (
-              <div key={m.model} className="flex justify-between py-2.5 text-sm">
-                <span className="code">{m.model}</span>
-                <span className="text-[color:var(--muted)]">{formatNumber(m.tokens)} tok &middot; {formatNumber(m.requests)} req</span>
+              <div key={m.model} className="flex justify-between gap-3 py-2.5 text-sm">
+                <span className="code break-all">{m.model}</span>
+                <span className="text-[color:var(--muted)] shrink-0">{formatNumber(m.tokens)} tok &middot; {formatNumber(m.requests)} req</span>
               </div>
             ))}
           </div>
@@ -118,7 +118,7 @@ export default async function DashboardOverview() {
 
       {/* Quick start */}
       <div className="grid lg:grid-cols-2 gap-4 mt-4">
-        <div className="card p-5">
+        <div className="card p-5 min-w-0">
           <h2 className="font-semibold tracking-tight">Quick start</h2>
           <p className="text-sm text-[color:var(--muted)] mt-1">Generate a key in API keys, then drop into your stack.</p>
           <pre className="code text-xs sm:text-sm mt-4 p-4 bg-[color:var(--panel-2)] rounded-lg overflow-x-auto leading-relaxed">
@@ -135,7 +135,7 @@ print(client.chat.completions.create(
 ).choices[0].message.content)`}
           </pre>
         </div>
-        <div className="card p-5">
+        <div className="card p-5 min-w-0">
           <h2 className="font-semibold tracking-tight">Models</h2>
           <div className="mt-4 divide-row">
             <ModelRow id="deepseek-v4-flash" name="DeepSeek V4 Flash" tier="Unlimited on Starter" pricing="₹6 in / ₹12 out per M" />
