@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { LogoMark } from './logo';
 
-export function DashboardShell({ children, email }: { children: React.ReactNode; email: string }) {
+export function DashboardShell({ children, email, isAdmin = false }: { children: React.ReactNode; email: string; isAdmin?: boolean }) {
   const path = usePathname();
   const router = useRouter();
 
@@ -18,6 +18,7 @@ export function DashboardShell({ children, email }: { children: React.ReactNode;
     { href: '/dashboard', label: 'Overview' },
     { href: '/dashboard/keys', label: 'API keys' },
     { href: '/billing', label: 'Billing' },
+    ...(isAdmin ? [{ href: '/admin', label: 'Admin' }] : []),
   ];
 
   return (

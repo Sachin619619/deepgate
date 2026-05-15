@@ -48,7 +48,7 @@ export default async function DashboardOverview() {
   const daysLeft = Math.max(0, Math.ceil((new Date(user.plan_expires_at).getTime() - Date.now()) / 86400000));
 
   return (
-    <DashboardShell email={user.email}>
+    <DashboardShell email={user.email} isAdmin={user.is_admin}>
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Overview</h1>

@@ -23,7 +23,7 @@ export default async function BillingPage() {
     [user.id]
   );
   return (
-    <DashboardShell email={user.email}>
+    <DashboardShell email={user.email} isAdmin={user.is_admin}>
       <h1 className="text-2xl font-semibold tracking-tight">Billing</h1>
       <p className="text-[color:var(--muted)] text-sm mt-1 mb-6">Subscribe to Starter or top up Pro tokens.</p>
       <BillingClient

@@ -17,6 +17,7 @@ export type SessionUser = {
   plan_expires_at: string;
   trial_tokens_remaining: number;
   paid_pro_tokens_remaining: number;
+  is_admin: boolean;
 };
 
 export async function hashPassword(p: string) {
@@ -66,7 +67,7 @@ export async function getSessionUser(): Promise<SessionUser | null> {
   const uid = await readSessionUserId();
   if (!uid) return null;
   const rows = await q<SessionUser>(
-    `SELECT id, email, name, plan, plan_expires_at, trial_tokens_remaining, paid_pro_tokens_remaining
+    `SELECT id, email, name, plan, plan_expires_at, trial_tokens_remaining, paid_pro_tokens_remaining, is_admin
      FROM deepgate.users WHERE id = $1`,
     [uid]
   );
@@ -76,5 +77,11 @@ export async function getSessionUser(): Promise<SessionUser | null> {
 export async function requireUser(): Promise<SessionUser> {
   const u = await getSessionUser();
   if (!u) throw new Error('UNAUTHENTICATED');
+  return u;
+}
+
+export async function requireAdmin(): Promise<SessionUser> {
+  const u = await getSessionUser();
+  if (!u || !u.is_admin) throw new Error('FORBIDDEN');
   return u;
 }
