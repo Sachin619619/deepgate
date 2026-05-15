@@ -15,6 +15,14 @@ type Payment = {
 const UPI_VPA = '8892162090@ybl';
 const PAYEE = 'DeepGate';
 
+const BANK = {
+  name: 'SACHIN A PASHUPATIHAL',
+  account: '50100161771983',
+  ifsc: 'HDFC0004251',
+  bank: 'HDFC Bank',
+  branch: 'Magadi Road',
+};
+
 const PRODUCTS = {
   'plan:starter': { label: 'Starter plan', priceInr: 1999, kind: 'plan' as const, id: 'starter' },
   'topup:small':  { label: '1M Pro tokens',   priceInr: 500,  kind: 'topup' as const, id: 'small' },
@@ -178,6 +186,19 @@ export function BillingClient({ plan, payments }: { plan: string; payments: Paym
                         </a>
                       ))}
                     </div>
+
+                    {/* Bank transfer — for India (NEFT / IMPS / RTGS) */}
+                    <div className="mt-4 border-t border-[color:var(--border)] pt-4">
+                      <p className="text-xs font-semibold text-[color:var(--muted)] uppercase tracking-widest">
+                        Or bank transfer (India · NEFT / IMPS)
+                      </p>
+                      <div className="mt-2 rounded-lg bg-[color:var(--panel-2)] divide-row text-sm">
+                        <BankRow label="Account name" value={BANK.name} />
+                        <BankRow label="Account number" value={BANK.account} mono />
+                        <BankRow label="IFSC" value={BANK.ifsc} mono />
+                        <BankRow label="Bank" value={`${BANK.bank} · ${BANK.branch}`} />
+                      </div>
+                    </div>
                   </div>
 
                   {/* Step 2 — confirm */}
@@ -211,6 +232,15 @@ export function BillingClient({ plan, payments }: { plan: string; payments: Paym
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function BankRow({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
+  return (
+    <div className="flex items-center justify-between gap-3 px-3 py-2">
+      <span className="text-[color:var(--muted)] text-xs shrink-0">{label}</span>
+      <span className={`text-right break-all ${mono ? 'code' : ''}`}>{value}</span>
     </div>
   );
 }
